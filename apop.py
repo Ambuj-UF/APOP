@@ -1,7 +1,7 @@
 import numpy
 import os
 import shutil
-from AlloNMD import *
+from src import *
 
 def apop_cli(filename):
     
