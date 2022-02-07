@@ -1,5 +1,5 @@
 
-from .packman import molecule
+from packman import molecule
 from .gnm import GNM
 
 from functools import reduce
