@@ -4,7 +4,7 @@ import shutil
 from src import *
 import argparse
 
-def apop_cli(filename, output_filepath=None):
+def apop_cli(filename, chain, cutoff, output_filepath=None):
 
     output_folder = "APOP_" + filename.split(".")[0]
     try:
@@ -13,7 +13,7 @@ def apop_cli(filename, output_filepath=None):
         os.system("rm -r %s" %output_folder)
         os.system("mkdir %s" %output_folder)
 
-    Model = Allostery(filename, chain = "All", cutoff=10.0, active_site=[])
+    Model = Allostery(filename, chain = chain, cutoff=cutoff, active_site=[])
     store_pockets = Model.get_pockets()
     with open(output_folder + "/apop_output.txt", "w") as fp:
         for key, val in store_pockets.items():
@@ -41,6 +41,10 @@ def main():
                         help='input filename')
     parser.add_argument('--terminallog', type=str,
                         help='redirect stdout here')
+    parser.add_argument('--chain', type=str, default='All',
+                        help='chain')
+    parser.add_argument('--cutoff', type=float, default=10.0,
+                        help='cutoff')
     parser.add_argument('--output', type=str, help='Path and filename write output to')
     args = parser.parse_args()
 
@@ -53,7 +57,7 @@ def main():
     else:
         input_file = args.input
 
-    apop_cli(input_file, args.output)
+    apop_cli(input_file, args.chain, args.cutoff, args.output)
 
     if args.terminallog:
         sys.stdout.close()
