@@ -73,8 +73,9 @@ def main():
     args = parser.parse_args()
 
     if args.terminallog:
-        sys.stdout = open(args.terminallog, 'w')
-
+        log = open(args.terminallog, 'w')
+        sys.stdout = log
+        sys.stderr = log
     if "/" in args.input or "\\" in args.input:
         shutil.copy2(args.input, os.getcwd())
         input_file = os.path.basename(args.input)
@@ -84,7 +85,7 @@ def main():
     apop_cli(input_file, args.pdbid, args.chain, args.cutoff, args.output)
 
     if args.terminallog:
-        sys.stdout.close()
+        log.close()
 
 if __name__ == "__main__":
     main()
