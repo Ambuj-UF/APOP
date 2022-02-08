@@ -7,15 +7,13 @@ import urllib
 
 def apop_cli(filename, pdbid, chain, cutoff, output_filepath=None):
 
-    try:
-        mol = molecule.load_structure(filename)
-    except:
+
+    if pdbid is not None:
         try:
             molecule.download_structure(pdbid, ftype="pdb")
+            filename = pdbid + ".pdb"
         except urllib.error.HTTPError:
             sys.exit("Failed to download structure for pdb id: {}".format(pdbid))
-
-    filename = pdbid + ".pdb"
 
     if chain != "All":
         mol = molecule.load_structure(filename)
