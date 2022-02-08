@@ -1,5 +1,5 @@
 
-from .packman import molecule
+from packman import molecule
 from functools import reduce
 import numpy
 from numpy import around
