@@ -112,6 +112,9 @@ class Allostery():
                 fp.write("ATOM  %5s %-4s %3s %1s%4s    %8s%8s%8s%6s%6s         %-4s%2s%2s\n"%(i.get_id(),i.get_name(),i.get_parent().get_name(),i.get_parent().get_parent().get_id(),i.get_parent().get_id(),around(i.get_location()[0],decimals=3),around(i.get_location()[1],decimals=3),around(i.get_location()[2],decimals=3),i.get_occupancy(),i.get_bfactor(),'',i.get_element(),''))
                     
         fdata = open(pdb_id+"_pre.pdb")
+        
+        self.filename = self.filename + ".pdb"
+        
         with open(self.filename, "w") as fp:
             for lines in fdata:
                 if "HETATM" in lines:
