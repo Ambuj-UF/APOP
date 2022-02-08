@@ -13,10 +13,10 @@ def apop_cli(filename, pdbid, chain, cutoff, output_filepath=None):
         try:
             molecule.download_structure(pdbid, ftype="pdb")
         except urllib.error.HTTPError:
-            sys.exit("Failed to download structure for pdb id:", pdbid)
-            
+            sys.exit("Failed to download structure for pdb id: {}".format(pdbid))
+
     filename = pdbid + ".pdb"
-    
+
     if chain != "All":
         mol = molecule.load_structure(filename)
         res = mol[0][chain].get_residues()
@@ -24,14 +24,14 @@ def apop_cli(filename, pdbid, chain, cutoff, output_filepath=None):
             for residue in res:
                 for i in residue.get_atoms():
                     fp.write("ATOM  %5s %-4s %3s %1s%4s    %8s%8s%8s%6s%6s         %-4s%2s%2s\n"%(i.get_id(),i.get_name(),i.get_parent().get_name(),i.get_parent().get_parent().get_id(),i.get_parent().get_id(),around(i.get_location()[0],decimals=3),around(i.get_location()[1],decimals=3),around(i.get_location()[2],decimals=3),i.get_occupancy(),i.get_bfactor(),'',i.get_element(),''))
-    
+
     output_folder = "APOP_" + filename.split(".")[0]
     try:
         os.system("mkdir %s" %output_folder)
     except:
         os.system("rm -r %s" %output_folder)
         os.system("mkdir %s" %output_folder)
-        
+
     shutil.copy2(filename, output_folder+"/"+filename)
 
     Model = Allostery(filename, pdbid=pdbid, chain = chain, cutoff=cutoff, active_site=[])
@@ -55,7 +55,7 @@ def apop_cli(filename, pdbid, chain, cutoff, output_filepath=None):
     shutil.make_archive(zip_filepath, 'zip', output_folder)
     shutil.rmtree(filename.split(".")[0] + "_out")
     shutil.rmtree(output_folder)
-    
+
 
 def main():
     parser = argparse.ArgumentParser()
