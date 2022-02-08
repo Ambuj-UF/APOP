@@ -31,6 +31,8 @@ def apop_cli(filename, pdbid, chain, cutoff, output_filepath=None):
     except:
         os.system("rm -r %s" %output_folder)
         os.system("mkdir %s" %output_folder)
+        
+    shutil.copy2(filename, output_folder+"/"+filename)
 
     Model = Allostery(filename, pdbid=pdbid, chain = chain, cutoff=cutoff, active_site=[])
     store_pockets = Model.get_pockets()
@@ -53,6 +55,7 @@ def apop_cli(filename, pdbid, chain, cutoff, output_filepath=None):
     shutil.make_archive(zip_filepath, 'zip', output_folder)
     shutil.rmtree(filename.split(".")[0] + "_out")
     shutil.rmtree(output_folder)
+    
 
 def main():
     parser = argparse.ArgumentParser()
