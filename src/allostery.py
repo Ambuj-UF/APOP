@@ -64,8 +64,9 @@ class Allostery():
             self.calpha = list()
             for chainID in self.chain:
                 for i in self.mol[0][chainID].get_residues():
-                    self.calpha.append(i.get_calpha())
-                    self.tip.append(i.get_tip())
+                    if i.get_calpha() != None:
+                        self.calpha.append(i.get_calpha())
+                        self.tip.append(i.get_tip())
 
         self.ids = [str(x.get_parent().get_id())+str(x.get_parent().get_parent().get_id()) for x in self.calpha]
 
