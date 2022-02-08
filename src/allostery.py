@@ -15,11 +15,15 @@ import urllib
 
 class Allostery():
     def __init__(self, filename, pdbid=None, chain="All", cutoff=10.0, active_site=None):
+        """
+        Detection of allosteric pocket from PDB ID
+        """
         self.cutoff = cutoff
         self.filename = filename
         self.chain = chain
         self.active_site = active_site
         self.pdbid = pdbid
+        
 
 
     def pull_pockets(self):
@@ -72,7 +76,7 @@ class Allostery():
             except AttributeError:
                 continue
 
-        print("res count", len(self.calpha))
+        #print("res count", len(self.calpha))
         self.coords = numpy.array(self.coords)
         self.coord_tips = [x.get_location() for x in self.tip]
         #print(len(self.coords), len(self.calpha))
@@ -96,35 +100,6 @@ class Allostery():
         """Yield successive n-sized chunks from lst."""
         for i in range(0, len(lst), n):
             yield lst[i:i + n]
-
-    def download(self):
-        pdb_id = self.filename.split("/")[-1][:-4]
-        chain = self.chain
-
-        try:
-            molecule.download_structure(pdb_id, ftype="pdb")
-        except urllib.error.HTTPError:
-            sys.exit("Failed to download structure for pdb id:", pdb_id)
-
-        mol = molecule.load_structure(pdb_id+".pdb")
-        element = mol[0].get_atoms()
-        with open(pdb_id+"_pre.pdb", "w") as fp:
-            for i in element:
-                fp.write("ATOM  %5s %-4s %3s %1s%4s    %8s%8s%8s%6s%6s         %-4s%2s%2s\n"%(i.get_id(),i.get_name(),i.get_parent().get_name(),i.get_parent().get_parent().get_id(),i.get_parent().get_id(),around(i.get_location()[0],decimals=3),around(i.get_location()[1],decimals=3),around(i.get_location()[2],decimals=3),i.get_occupancy(),i.get_bfactor(),'',i.get_element(),''))
-
-        fdata = open(pdb_id+"_pre.pdb")
-        
-        self.filename = self.filename + ".pdb"
-        
-        with open(self.filename, "w") as fp:
-            for lines in fdata:
-                if "HETATM" in lines:
-                    continue
-                else:
-                    fp.write(lines)
-        os.remove(self.filename.split("/")[-1])
-        os.remove(pdb_id+"_pre.pdb")
-        return True
 
 
     def geo_center(self,coords):
@@ -154,16 +129,6 @@ class Allostery():
 
 
     def runTest(self):
-
-        print(self.filename)
-
-        if self.pdbid is not None:
-            print("Downloading structure\n")
-            self.download()
-        elif os.path.exists(self.filename):
-            print("\n",self.filename,"file exists!\n")
-        else:
-            sys.exit("Must either specify pdb id or provide a real input file")
 
         self.pull_pockets()
         print("\nComputing dynamics\n")

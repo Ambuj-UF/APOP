@@ -3,9 +3,20 @@ import sys
 import shutil
 from src import *
 import argparse
+import urllib
 
 def apop_cli(filename, pdbid, chain, cutoff, output_filepath=None):
 
+    try:
+        mol = molecule.load_structure(filename)
+    except:
+        try:
+            molecule.download_structure(pdbid, ftype="pdb")
+        except urllib.error.HTTPError:
+            sys.exit("Failed to download structure for pdb id:", pdbid)
+            
+    filename = pdbid + ".pdb"
+    
     output_folder = "APOP_" + filename.split(".")[0]
     try:
         os.system("mkdir %s" %output_folder)
