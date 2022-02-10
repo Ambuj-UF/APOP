@@ -15,9 +15,13 @@ def apop_cli(filename, pdbid, chain, cutoff, output_filepath=None):
         except urllib.error.HTTPError:
             sys.exit("Failed to download structure for pdb id: {}".format(pdbid))
 
+<<<<<<< HEAD
     mol = molecule.load_structure(filename)
+=======
+>>>>>>> 770a62ffc43784cc4f0e1936d3d1a9aef96cda09
     if chain != "All":
         res = mol[0][chain].get_residues()
+<<<<<<< HEAD
     else:
         res = mol[0].get_residues()
         
@@ -26,6 +30,12 @@ def apop_cli(filename, pdbid, chain, cutoff, output_filepath=None):
         for residue in res:
             for i in residue.get_atoms():
                 fp.write("ATOM  %5s %-4s %3s %1s%4s    %8s%8s%8s%6s%6s         %-4s%2s%2s\n"%(i.get_id(),i.get_name(),i.get_parent().get_name(),i.get_parent().get_parent().get_id(),i.get_parent().get_id(),around(i.get_location()[0],decimals=3),around(i.get_location()[1],decimals=3),around(i.get_location()[2],decimals=3),i.get_occupancy(),i.get_bfactor(),'',i.get_element(),''))
+=======
+        with open(pdbid+".pdb", "w") as fp:
+            for residue in res:
+                for i in residue.get_atoms():
+                    fp.write("ATOM  %5s %-4s %3s %1s%4s    %8s%8s%8s%6s%6s         %-4s%2s%2s\n"%(i.get_id(),i.get_name(),i.get_parent().get_name(),i.get_parent().get_parent().get_id(),i.get_parent().get_id(),around(i.get_location()[0],decimals=3),around(i.get_location()[1],decimals=3),around(i.get_location()[2],decimals=3),i.get_occupancy(),i.get_bfactor(),'',i.get_element(),''))
+>>>>>>> 770a62ffc43784cc4f0e1936d3d1a9aef96cda09
 
     output_folder = "APOP_" + filename.split(".")[0]
     try:
